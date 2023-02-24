@@ -2,7 +2,7 @@
 name = "mnist-pytorch"
 version = "0.1.0"
 description = ""
-authors = ["Your Name <you@example.com>"]
+authors = ["Maxime Boulanger <boumax84@gmail.com>"]
 readme = "README.md"
 packages = [{include = "mnist_pytorch"}]
 
@@ -21,11 +21,12 @@ pytest = "^7.2.1"
 eradicate = "^2.1.0"
 pybetter = "^0.4.1"
 pylint = "^2.16.2"
+jupyter = "^1.0.0"
 
 [tool.poetry.group.api.dependencies]
 djangorestframework = "^3.14.0"
-djangorestframework-simplejwt = "^5.2.2"
 psycopg2-binary = "^2.9.5"
+djangorestframework-api-key = "^2.3.0"
 
 [build-system]
 requires = ["poetry-core"]

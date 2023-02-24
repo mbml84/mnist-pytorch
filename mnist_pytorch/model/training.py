@@ -2,6 +2,7 @@ from __future__ import annotations
 
 from datetime import datetime
 
+import fire
 import torch
 from pytorch_lightning import Trainer
 from pytorch_lightning.loggers import TensorBoardLogger
@@ -39,44 +40,52 @@ def _setup(
     return trainer, model, MNISTDataModule(batch_size=batch_size)
 
 
-def train(
-    accelerator: str,
-    devices: int,
-    max_epochs: int,
-    log_every_n_steps: int,
-    batch_size: int,
-    checkpoint_path: str | None = None,
-) -> None:
+class Runner:
 
-    trainer, model, datamodule = _setup(
-        model=CNN(),
-        batch_size=batch_size,
-        accelerator=accelerator,
-        devices=devices,
-        max_epochs=max_epochs,
-        log_every_n_steps=log_every_n_steps,
-        checkpoint_path=checkpoint_path,
-    )
+    @classmethod
+    def train(
+        cls,
+        accelerator: str = 'cpu',
+        devices: int = 1,
+        max_epochs: int = 1,
+        log_every_n_steps: int = 50,
+        batch_size: int = 32,
+        checkpoint_path: str | None = None,
+    ):
+        trainer, model, datamodule = _setup(
+            model=CNN(),
+            batch_size=batch_size,
+            accelerator=accelerator,
+            devices=devices,
+            max_epochs=max_epochs,
+            log_every_n_steps=log_every_n_steps,
+            checkpoint_path=checkpoint_path,
+        )
 
-    trainer.fit(
-        model=model,
-        datamodule=datamodule,
-    )
+        trainer.fit(
+            model=model,
+            datamodule=datamodule,
+        )
 
-    trainer.test(
-        model=model,
-        datamodule=datamodule,
-    )
+        trainer.test(
+            model=model,
+            datamodule=datamodule,
+        )
 
-    trainer.validate(
-        model=model,
-        datamodule=datamodule,
-    )
+        trainer.validate(
+            model=model,
+            datamodule=datamodule,
+        )
 
-    filename = f'{CNN.MODEL_NAME}-{datetime.utcnow()}-{max_epochs=}-{batch_size=}.pt'
-    torch.save(model.state_dict(), CONFIG.weights_path / filename)
+        filename = f'{CNN.MODEL_NAME}-{datetime.utcnow()}-{max_epochs=}-{batch_size=}.pt'
+        model_jit = torch.jit.script(model)
+        torch.jit.save(model_jit, CONFIG.weights_path / filename)
+
+
+if __name__ == '__main__':
+    fire.Fire(Runner)
 
 
 __all__ = [
-    'train',
+    'Runner',
 ]

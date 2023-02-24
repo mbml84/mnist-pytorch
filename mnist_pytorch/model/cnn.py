@@ -17,6 +17,7 @@ class CNN(LightningModule):
         self.dropout2 = torch.nn.Dropout(0.5)
         self.fc1 = torch.nn.Linear(9216, 128)
         self.fc2 = torch.nn.Linear(128, 10)
+        self.example_input_array = torch.Tensor(32, 1, 28, 28)
 
     def _log_loss(self, name: str, loss: torch.Tensor) -> None:
         self.log(
