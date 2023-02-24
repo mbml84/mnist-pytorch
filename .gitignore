@@ -132,3 +132,5 @@ dmypy.json
 /data/
 /mnist_pytorch/logs/
 /weights/
+
+.env.sh
