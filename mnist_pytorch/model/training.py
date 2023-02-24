@@ -30,7 +30,7 @@ def _setup(
     trainer = Trainer(
         accelerator=accelerator,
         devices=devices,
-        logger=TensorBoardLogger(save_dir='logs'),
+        logger=TensorBoardLogger(save_dir='../logs'),
         log_every_n_steps=log_every_n_steps,
         max_epochs=max_epochs,
         gradient_clip_algorithm='norm',
@@ -47,7 +47,7 @@ class Runner:
         cls,
         accelerator: str = 'cpu',
         devices: int = 1,
-        max_epochs: int = 1,
+        max_epochs: int = 50,
         log_every_n_steps: int = 50,
         batch_size: int = 32,
         checkpoint_path: str | None = None,
