@@ -25,9 +25,9 @@ BASE_DIR = Path(__file__).resolve().parents[1]
 SECRET_KEY = os.environ['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DEBUG') == 1
+DEBUG = os.getenv('DEBUG') == '1'
 
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split(';')
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '*').split(';')
 
 
 # Application definition
@@ -134,11 +134,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_api_key.permissions.HasAPIKey',
-    ),
     'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated'
+        'rest_framework_api_key.permissions.HasAPIKey',
     ),
 }
 

@@ -10,10 +10,10 @@ INPUT_SIZE = (28, 28)
 
 
 def predict(image_stream):
-    image = Image.open(image_stream)
-    image.resize(INPUT_SIZE)
-    image_array = np.array(image).astype(np.float) / 255
-    tensor_input = torch.tensor(image_array).permute(2, 0, 1).unsqueeze(0)
+    image = Image.open(image_stream).convert('L')
+    image = image.resize(INPUT_SIZE)
+    image_array = np.array(image).astype(np.float64) / 255
+    tensor_input = torch.tensor(image_array, dtype=torch.float).permute(0, 1).unsqueeze(0).unsqueeze(0)
     prediction = _MODEL(tensor_input)
     return torch.argmax(prediction) + 1
 
