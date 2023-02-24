@@ -246,7 +246,7 @@ python-dateutil = ">=2.7.0"
 name = "asgiref"
 version = "3.6.0"
 description = "ASGI specs, helper code, and adapters"
-category = "main"
+category = "dev"
 optional = false
 python-versions = ">=3.7"
 files = [
@@ -714,7 +714,7 @@ files = [
 name = "django"
 version = "4.1.7"
 description = "A high-level Python web framework that encourages rapid development and clean, pragmatic design."
-category = "main"
+category = "dev"
 optional = false
 python-versions = ">=3.8"
 files = [
@@ -735,7 +735,7 @@ bcrypt = ["bcrypt"]
 name = "djangorestframework"
 version = "3.14.0"
 description = "Web APIs for Django, made easy."
-category = "main"
+category = "dev"
 optional = false
 python-versions = ">=3.6"
 files = [
@@ -751,7 +751,7 @@ pytz = "*"
 name = "djangorestframework-api-key"
 version = "2.3.0"
 description = "API key permissions for the Django REST Framework"
-category = "main"
+category = "dev"
 optional = false
 python-versions = ">=3.7"
 files = [
@@ -2577,7 +2577,7 @@ test = ["enum34", "ipaddress", "mock", "pywin32", "wmi"]
 name = "psycopg2-binary"
 version = "2.9.5"
 description = "psycopg2 - Python-PostgreSQL Database Adapter"
-category = "main"
+category = "dev"
 optional = false
 python-versions = ">=3.6"
 files = [
@@ -2926,7 +2926,7 @@ test = ["cloudpickle (>=1.3)", "codecov (==2.1.12)", "coverage (==6.5.0)", "fast
 name = "pytz"
 version = "2022.7.1"
 description = "World timezone definitions, modern and historical"
-category = "main"
+category = "dev"
 optional = false
 python-versions = "*"
 files = [
@@ -3346,7 +3346,7 @@ files = [
 name = "sqlparse"
 version = "0.4.3"
 description = "A non-validating SQL parser."
-category = "main"
+category = "dev"
 optional = false
 python-versions = ">=3.5"
 files = [
@@ -3701,7 +3701,7 @@ typing-extensions = ">=3.7.4"
 name = "tzdata"
 version = "2022.7"
 description = "Provider of IANA time zone data"
-category = "main"
+category = "dev"
 optional = false
 python-versions = ">=2"
 files = [
@@ -4025,4 +4025,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.10"
-content-hash = "9de0c21d763d05c222b85305dd49fad7954becf1a9cbfe39ff6242d4b42d4729"
+content-hash = "bcda52acf51c60bc0069d28f0c130ce99163e8514c5b0d9862c69d7715db233b"
