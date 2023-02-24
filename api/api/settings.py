@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework_api_key',
-    'core',
+    'core.apps.CoreConfig',
 ]
 
 MIDDLEWARE = [
@@ -163,3 +163,8 @@ __all__ = [
 ]
 
 WEIGHTS_PATH = BASE_DIR / os.environ['WEIGHTS_PATH']
+
+MEDIA_ROOT = BASE_DIR / 'mediafiles'
+
+# URL used to access the media
+MEDIA_URL = '/media/'

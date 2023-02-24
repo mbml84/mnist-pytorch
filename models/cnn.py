@@ -8,7 +8,7 @@ from pytorch_lightning import LightningModule
 from pytorch_lightning.utilities.types import EPOCH_OUTPUT
 from pytorch_lightning.utilities.types import STEP_OUTPUT
 
-from mnist_pytorch.model import utils
+from models import metrics
 
 
 class CNN(torch.nn.Module):
@@ -43,13 +43,13 @@ class DistributedCNN(LightningModule):
 
     MODEL_NAME = 'mnist-cnn'
 
-    def __init__(self, model: CNN):
+    def __init__(self, model: CNN, batch_size: int):
         super().__init__()
         self.model = model
         self._metrics = {
-            stage: utils.ClassificationMetrics(parent=self, stage=stage) for stage in list(utils.Stage)
+            stage: metrics.ClassificationMetrics(parent=self, stage=stage) for stage in list(metrics.Stage)
         }
-        self.example_input_array = torch.Tensor(32, 1, 28, 28)
+        self.example_input_array = torch.Tensor(batch_size, 1, 28, 28)
 
     def _log_loss(self, name: str, loss: torch.Tensor) -> None:
         self.log(
@@ -60,7 +60,7 @@ class DistributedCNN(LightningModule):
             sync_dist=False,
         )
 
-    def _execute_step(self, stage: utils.Stage, batch, batch_idx: int) -> dict[str, torch.Tensor]:
+    def _execute_step(self, stage: metrics.Stage, batch, batch_idx: int) -> dict[str, torch.Tensor]:
         inputs, targets = batch
         output = self(inputs)
 
@@ -78,34 +78,34 @@ class DistributedCNN(LightningModule):
         return {'optimizer': optimizer, 'lr_scheduler': scheduler}
 
     def training_step(self, batch, batch_idx) -> dict[str, torch.Tensor]:
-        return self._execute_step(utils.Stage.TRAIN, batch, batch_idx)
+        return self._execute_step(metrics.Stage.TRAIN, batch, batch_idx)
 
     def training_step_end(self, step_output: STEP_OUTPUT) -> STEP_OUTPUT:
-        self._metrics[utils.Stage.TRAIN].log_step_metrics()
+        self._metrics[metrics.Stage.TRAIN].log_step_metrics()
         return super().training_step_end(step_output)
 
     def training_epoch_end(self, outputs: EPOCH_OUTPUT) -> None:
-        self._metrics[utils.Stage.TRAIN].log_epoch_metrics()
+        self._metrics[metrics.Stage.TRAIN].log_epoch_metrics()
 
     def validation_step(self, batch, batch_idx) -> dict[str, torch.Tensor]:
-        return self._execute_step(utils.Stage.VALIDATION, batch, batch_idx)
+        return self._execute_step(metrics.Stage.VALIDATION, batch, batch_idx)
 
     def validation_step_end(self, *args: Any, **kwargs: Any) -> STEP_OUTPUT | None:
-        self._metrics[utils.Stage.VALIDATION].log_step_metrics()
+        self._metrics[metrics.Stage.VALIDATION].log_step_metrics()
         return super().validation_step_end(*args, **kwargs)
 
     def validation_epoch_end(self, outputs: EPOCH_OUTPUT | list[EPOCH_OUTPUT]) -> None:
-        self._metrics[utils.Stage.VALIDATION].log_epoch_metrics()
+        self._metrics[metrics.Stage.VALIDATION].log_epoch_metrics()
 
     def test_step(self, batch, batch_idx) -> dict[str, torch.Tensor]:
-        return self._execute_step(utils.Stage.TEST, batch, batch_idx)
+        return self._execute_step(metrics.Stage.TEST, batch, batch_idx)
 
     def test_step_end(self, *args: Any, **kwargs: Any) -> STEP_OUTPUT | None:
-        self._metrics[utils.Stage.TEST].log_step_metrics()
+        self._metrics[metrics.Stage.TEST].log_step_metrics()
         return super().test_step_end(*args, **kwargs)
 
     def test_epoch_end(self, outputs: EPOCH_OUTPUT | list[EPOCH_OUTPUT]) -> None:
-        self._metrics[utils.Stage.TEST].log_epoch_metrics()
+        self._metrics[metrics.Stage.TEST].log_epoch_metrics()
 
     def forward(self, x):
         return self.model(x)
