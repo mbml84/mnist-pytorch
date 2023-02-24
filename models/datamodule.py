@@ -6,7 +6,7 @@ from torch.utils.data import random_split
 from torchvision import transforms
 from torchvision.datasets import MNIST
 
-from mnist_pytorch.config import CONFIG
+from models.config import CONFIG
 
 
 class MNISTDataModule(LightningDataModule):

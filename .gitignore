@@ -130,7 +130,11 @@ dmypy.json
 
 .idea/
 /data/
-/mnist_pytorch/logs/
-/weights/
+/models/logs/
+/models/weights/
 
 .env.sh
+/api/mediafiles/
+/models/weights/
+
+*.pt

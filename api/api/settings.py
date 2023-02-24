@@ -25,9 +25,9 @@ BASE_DIR = Path(__file__).resolve().parents[1]
 SECRET_KEY = os.environ['SECRET_KEY']
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.getenv('DEBUG') == 1
+DEBUG = os.getenv('DEBUG') == '1'
 
-ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split(';')
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '*').split(';')
 
 
 # Application definition
@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'rest_framework_api_key',
-    'core',
+    'core.apps.CoreConfig',
 ]
 
 MIDDLEWARE = [
@@ -134,11 +134,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_api_key.permissions.HasAPIKey',
-    ),
     'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated'
+        'rest_framework_api_key.permissions.HasAPIKey',
     ),
 }
 
@@ -166,3 +163,8 @@ __all__ = [
 ]
 
 WEIGHTS_PATH = BASE_DIR / os.environ['WEIGHTS_PATH']
+
+MEDIA_ROOT = BASE_DIR / 'mediafiles'
+
+# URL used to access the media
+MEDIA_URL = '/media/'

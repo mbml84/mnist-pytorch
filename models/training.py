@@ -7,11 +7,11 @@ import torch
 from pytorch_lightning import Trainer
 from pytorch_lightning.loggers import TensorBoardLogger
 
-from mnist_pytorch.config import CONFIG
-from mnist_pytorch.model import callbacks
-from mnist_pytorch.model.cnn import CNN
-from mnist_pytorch.model.cnn import DistributedCNN
-from mnist_pytorch.model.datamodule import MNISTDataModule
+from models import callbacks
+from models.cnn import CNN
+from models.cnn import DistributedCNN
+from models.config import CONFIG
+from models.datamodule import MNISTDataModule
 
 
 def _setup(
@@ -31,7 +31,7 @@ def _setup(
     trainer = Trainer(
         accelerator=accelerator,
         devices=devices,
-        logger=TensorBoardLogger(save_dir='../logs'),
+        logger=TensorBoardLogger(save_dir='logs'),
         log_every_n_steps=log_every_n_steps,
         max_epochs=max_epochs,
         gradient_clip_algorithm='norm',
@@ -54,7 +54,7 @@ class Runner:
         checkpoint_path: str | None = None,
     ):
         trainer, model, datamodule = _setup(
-            model=DistributedCNN(model=CNN()),
+            model=DistributedCNN(model=CNN(), batch_size=batch_size),
             batch_size=batch_size,
             accelerator=accelerator,
             devices=devices,
