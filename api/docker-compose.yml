@@ -4,16 +4,16 @@ services:
   db:
     image: postgres
     volumes:
-      - ./data/db:/etc/django/${APP_NAME}/data
+      - postgres_data:/var/lib/postgresql/data/
     environment:
       - POSTGRES_DB=${DB_NAME}
       - POSTGRES_USER=${DB_USER}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
   web:
     build: .
-    command: /bin/sh scripts/start-server.sh
+    command: /bin/sh scripts/setup.sh && gunicorn api.asgi:application --bind 0.0.0.0:8000 -k uvicorn.workers.UvicornWorker --workers ${N_WORKERS:-2}
     volumes:
-      - mediafiles:/etc/django/${APP_NAME}/mediafiles
+      - mediafiles:/home/app/src/mediafiles
     ports:
       - "8000:8000"
     environment:
@@ -25,8 +25,32 @@ services:
       - DB_HOST=db
       - DB_PORT=5432
       - WEIGHTS_PATH=${WEIGHTS_PATH}
-      - LOG_LEVEL=${LOG_LEVEL}
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.django.rule=Host('${HOST_URL}')"
+      - "traefik.http.routers.django.tls=true"
+      - "traefik.http.routers.django.tls.certresolver=letsencrypt"
     depends_on:
       - db
+  traefik:  # new
+    build:
+      context: .
+      dockerfile: Dockerfile.traefik
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+      - "./traefik-public-certificates:/certificates"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.dashboard.rule=Host('${HOST_URL}')"
+      - "traefik.http.routers.dashboard.tls=true"
+      - "traefik.http.routers.dashboard.tls.certresolver=letsencrypt"
+      - "traefik.http.routers.dashboard.service=api@internal"
+      - "traefik.http.routers.dashboard.middlewares=auth"
 volumes:
+  postgres_data:
   mediafiles:
+  traefik-public-certificates:

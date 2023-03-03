@@ -32,20 +32,25 @@ class PredictView(APIView):
     ) -> Response:
         image_stream = request.FILES['image']
         prediction = predict(deepcopy(image_stream))
-        data = {
-            'image': image_stream,
-            'prediction': prediction,
-        }
-        serializer = serializers.PictureSerializer(data=data)
-        if serializer.is_valid(raise_exception=True):
-            instance = serializer.create(data)
-            instance.save()
-            response = Response(
-                {'prediction': prediction},
-                status=status.HTTP_200_OK,
-            )
+        if prediction == -1:
+            response = Response(status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         else:
-            response = Response(status=status.HTTP_422_UNPROCESSABLE_ENTITY)
+            data = {
+                'image': image_stream,
+                'prediction': prediction,
+            }
+            serializer = serializers.PictureSerializer(data=data)
+            if serializer.is_valid(raise_exception=True):
+                instance = serializer.create(data)
+                instance.save()
+                response = Response(
+                    {'prediction': prediction},
+                    status=status.HTTP_200_OK,
+                )
+            else:
+                response = Response(
+                    status=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                )
 
         return response
 

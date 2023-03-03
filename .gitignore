@@ -132,10 +132,7 @@ dmypy.json
 /data/
 /models/logs/
 /models/weights/
-
 .env.sh
 /api/mediafiles/
-/models/weights/
 
 *.pt
-/api/mediafiles/

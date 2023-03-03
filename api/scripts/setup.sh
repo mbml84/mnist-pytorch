@@ -1,7 +1,3 @@
-echo "Setup project..."
-
-SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
-
-python "$SCRIPT_DIR"/manage.py collectstatic
-python "$SCRIPT_DIR"/manage.py migrate
-python "$SCRIPT_DIR"/manage.py createsuperuser
+cd src
+python manage.py collectstatic --noinput
+python manage.py migrate
