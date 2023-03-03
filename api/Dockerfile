@@ -20,7 +20,10 @@ COPY src/ src/
 COPY data/ data/
 COPY scripts/ scripts/
 
-RUN useradd ubuntu
-USER ubuntu
+RUN useradd ubuntu \
+    && chmod -R a+w /var/run/ \
+    && chmod -R a+w /var/log \
+    && usermod -aG sudo ubuntu \
+    && echo "ubuntu ALL=(ALL) NOPASSWD:ALL" >> /etc/sudoers
 
 EXPOSE 8000
