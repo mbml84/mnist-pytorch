@@ -134,7 +134,8 @@ dmypy.json
 /models/weights/
 
 .env.sh
-/api/src/mediafiles/
+/api/mediafiles/
 /models/weights/
 
 *.pt
+/api/mediafiles/

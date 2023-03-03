@@ -122,18 +122,15 @@ USE_I18N = True
 
 USE_TZ = True
 
-STATIC_ROOT = BASE_DIR.parent / 'static/'
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
-
 STATIC_URL = 'static/'
-
+STATIC_ROOT = BASE_DIR / 'static/'
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
-
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
@@ -146,10 +143,79 @@ REST_FRAMEWORK = {
 
 WEIGHTS_PATH = BASE_DIR / os.environ['WEIGHTS_PATH']
 
-MEDIA_ROOT = BASE_DIR.parent / 'mediafiles'
 
 # URL used to access the media
 MEDIA_URL = '/media/'
+MEDIA_ROOT = BASE_DIR / 'mediafiles'
+
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '\033[1m\033[32m{levelname:10s} \33[34m{asctime}\33[0m - {filename} - {module}.{funcName} : \33[1m{message}\33[0m',
+            'style': '{',
+        },
+        'warning': {
+            'format': '\033[1m\033[33m{levelname:10s} {asctime} - {filename} - {module}.{funcName} : {message}\33[0m',
+            'style': '{',
+        },
+        'critical': {
+            'format': '\033[1m\033[33m{levelname:10s} {asctime} - {filename} - {module}.{funcName} : {message}\33[0m',
+            'style': '{',
+        },
+    },
+    'filters': {
+        'require_debug_true': {
+            '()': 'django.utils.log.RequireDebugTrue',
+        },
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse',
+        },
+        'standard': {
+            '()': 'api.log_filters.StandardFilter',
+        },
+        'warning': {
+            '()': 'api.log_filters.WarningFilter',
+        },
+        'critical': {
+            '()': 'api.log_filters.CriticalFilter',
+        },
+    },
+    'handlers': {
+        'console': {
+            'level': 'DEBUG',
+            'filters': ['standard'],
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose',
+        },
+        'console_warning': {
+            'level': 'WARNING',
+            'filters': ['warning'],
+            'class': 'logging.StreamHandler',
+            'formatter': 'warning',
+        },
+        'console_critical': {
+            'level': 'CRITICAL',
+            'filters': ['critical'],
+            'class': 'logging.StreamHandler',
+            'formatter': 'critical',
+        },
+        'mail_admins': {
+            'level': 'ERROR',
+            'filters': ['require_debug_false'],
+            'class': 'django.utils.log.AdminEmailHandler',
+            'formatter': 'critical',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console', 'console_warning', 'console_critical', 'mail_admins'],
+            'propagate': False,
+        },
+    },
+}
 
 
 __all__ = [

@@ -1,19 +1,19 @@
-version: "2"
+version: "3"
 
 services:
   db:
     image: postgres
     volumes:
-      - ./data/db:/etc/postgresql/data
+      - ./data/db:/etc/django/${APP_NAME}/data
     environment:
       - POSTGRES_DB=${DB_NAME}
       - POSTGRES_USER=${DB_USER}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
   web:
     build: .
-    command: python src/manage.py runserver 0.0.0.0:8000
+    command: /bin/sh scripts/start-server.sh
     volumes:
-      - .:/code
+      - mediafiles:/etc/django/${APP_NAME}/mediafiles
     ports:
       - "8000:8000"
     environment:
@@ -25,5 +25,8 @@ services:
       - DB_HOST=db
       - DB_PORT=5432
       - WEIGHTS_PATH=${WEIGHTS_PATH}
+      - LOG_LEVEL=${LOG_LEVEL}
     depends_on:
       - db
+volumes:
+  mediafiles:
