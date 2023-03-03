@@ -25,6 +25,7 @@ jobs:
       run: |
         python -m pip install --upgrade pip
         pip install poetry
+        cd api
         poetry export --with dev --without-hashes --no-interaction --no-ansi -f requirements.txt -o requirements.txt
         pip install -r requirements.txt --use-deprecated=legacy-resolver
     - name: Run Tests
