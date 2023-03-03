@@ -31,3 +31,11 @@ jobs:
     - name: Run Tests
       run: |
         python api/src/manage.py test
+      env:
+        SECRET_KEY: "6=67en^cafr$+uby=bsi1ufpg!gxs5a!96ws2rmd^uelixhf4-"
+        DB_NAME: "test_db"
+        DB_USER: "test_user"
+        DB_PASSWORD: "test_password"
+        DB_HOST: "127.0.0.1"
+        DB_PORT: 5432
+        WEIGHTS_PATH: '../data/mnist-cnn@latest.pt'
