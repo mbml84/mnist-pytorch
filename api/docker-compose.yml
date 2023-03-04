@@ -6,7 +6,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     environment:
-      - POSTGRES_DB=${DB_NAME}
+      - POSTGRES_DB="mnist-api-db"
       - POSTGRES_USER=${DB_USER}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
   web:
@@ -19,7 +19,7 @@ services:
     environment:
       - SECRET_KEY=${SECRET_KEY}
       - ALLOWED_HOSTS=${ALLOWED_HOSTS}
-      - DB_NAME=${DB_NAME}
+      - DB_NAME="mnist-api-db"
       - DB_USER=${DB_USER}
       - DB_PASSWORD=${DB_PASSWORD}
       - DB_HOST=db
@@ -33,13 +33,13 @@ services:
       - "traefik.http.routers.django.tls.certresolver=letsencrypt"
     depends_on:
       - db
-  traefik:  # new
+  traefik:
     build:
       context: .
       dockerfile: Dockerfile.traefik
     ports:
-      - 80:80
-      - 443:443
+      - "80:80"
+      - "443:443"
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
       - "./traefik-public-certificates:/certificates"
