@@ -6,6 +6,11 @@ ENV POETRY_VERSION=1.2.2
 
 WORKDIR app/
 
+# Virtual environment setup
+ENV VIRTUAL_ENV=/opt/venv
+RUN python3 -m venv $VIRTUAL_ENV
+ENV PATH="$VIRTUAL_ENV/bin:$PATH"
+
 # Poetry install
 RUN pip install "poetry==$POETRY_VERSION"
 
@@ -14,7 +19,8 @@ COPY poetry.lock pyproject.toml ./
 
 # install runtime dependencies
 RUN poetry export --with dev --without-hashes --no-interaction --no-ansi -f requirements.txt -o requirements.txt
-RUN pip install -r requirements.txt --use-deprecated=legacy-resolver
+RUN pip install --upgrade pip && \
+    pip install -r requirements.txt --use-deprecated=legacy-resolver
 
 COPY src/ src/
 COPY data/ data/
