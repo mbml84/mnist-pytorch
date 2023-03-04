@@ -14,6 +14,7 @@ services:
     command: /bin/sh scripts/setup.sh && gunicorn api.asgi:application --bind 0.0.0.0:8000 -k uvicorn.workers.UvicornWorker --workers ${N_WORKERS:-2}
     volumes:
       - mediafiles:/home/app/src/mediafiles
+      - cnn:/home/app/data/mnist-cnn@lastest.pt
     ports:
       - "8000:8000"
     environment:
@@ -54,3 +55,4 @@ volumes:
   postgres_data:
   mediafiles:
   traefik-public-certificates:
+  cnn:
