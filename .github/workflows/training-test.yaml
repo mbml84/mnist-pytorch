@@ -1,0 +1,13 @@
+name: 'Training test'
+on:
+    pull_request:
+        branches:
+            - main
+jobs:
+    coverage:
+        runs-on: ubuntu-latest
+        steps:
+          - name: Get coverage
+            uses: orgoro/coverage@v3
+            with:
+                coverageFile: .coverage.xml
