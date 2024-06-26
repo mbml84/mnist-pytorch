@@ -25,7 +25,7 @@ jupyter = "^1.0.0"
 coverage = "^7.2.1"
 
 [tool.poetry.group.api.dependencies]
-djangorestframework = "^3.14.0"
+djangorestframework = "^3.15.2"
 psycopg2-binary = "^2.9.5"
 djangorestframework-api-key = "^2.3.0"
 pillow = "^10.0.1"
